@@ -1,0 +1,108 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Program
+{
+    static void Main()
+    {
+        List<double> valoresVentas = new List<double>();
+
+        int opcion;
+        do
+        {
+            Console.WriteLine("\n Sistema de caja de minimercado");
+            Console.WriteLine("1. Registrar venta");
+            Console.WriteLine("2. Mostrar reporte del día");
+            Console.WriteLine("0. Salir");
+            Console.Write("Seleccione una opción: ");
+
+   string entrada = Console.ReadLine();
+
+	if (!int.TryParse(entrada, out opcion))
+	{
+   	 	Console.WriteLine("Entrada inválida. Debe ingresar un número.");
+   	 	opcion = -1; 
+}
+            switch (opcion)
+            {
+                case 1:
+                    RegistrarVenta(valoresVentas);
+                    break;
+
+                case 2:
+                    MostrarReporte(valoresVentas);
+                    break;
+
+                case 0:
+                    Console.WriteLine("Saliendo del sistema...");
+                    break;
+
+                default:
+                    Console.WriteLine("Opción inválida.");
+                    break;
+            }
+
+
+        } while (opcion != 0);
+    }
+
+    static void RegistrarVenta(List<double> valoresVentas)
+    {
+        Console.Write("\nNombre del producto: ");
+        string nombreProducto = Console.ReadLine();
+
+        int cantidad;
+        double valorUnitario;
+
+        // Validación cantidad
+        Console.Write("Cantidad: ");
+        while (!int.TryParse(Console.ReadLine(), out cantidad) || cantidad <= 0)
+        {
+            Console.Write("Entrada inválida. Ingrese una cantidad válida: ");
+        }
+
+        // Validación valor unitario
+        Console.Write("Valor unitario: ");
+        while (!double.TryParse(Console.ReadLine(), out valorUnitario) || valorUnitario <= 0)
+        {
+            Console.Write("Entrada inválida. Ingrese un valor válido: ");
+        }
+
+        double valorVenta = cantidad * valorUnitario;
+        valoresVentas.Add(valorVenta);
+
+        Console.WriteLine($"Venta registrada correctamente. Total: {valorVenta:C}");
+    }
+
+    static void MostrarReporte(List<double> valoresVentas)
+    {
+        Console.WriteLine("\n=== REPORTE DEL DÍA ===");
+
+        if (valoresVentas.Count == 0)
+        {
+            Console.WriteLine("No hay ventas registradas en el día.");
+            return;
+        }
+
+        // Acumulador
+        double totalVendido = 0;
+
+        // Contador
+        int cantidadVentas = valoresVentas.Count;
+
+        // Calcular total
+        foreach (double venta in valoresVentas)
+        {
+            totalVendido += venta;
+        }
+
+        double promedio = totalVendido / cantidadVentas;
+        double mayorVenta = valoresVentas.Max();
+
+        Console.WriteLine($"Total vendido: {totalVendido:C}");
+        Console.WriteLine($"Promedio por venta: {promedio:C}");
+        Console.WriteLine($"Venta de mayor valor: {mayorVenta:C}");
+        Console.WriteLine($"Cantidad de ventas: {cantidadVentas}");
+    }
+}
